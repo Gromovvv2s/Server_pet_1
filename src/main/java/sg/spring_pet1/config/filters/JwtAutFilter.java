@@ -29,7 +29,7 @@ public class JwtAutFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (false) {
+        if (!request.getRequestURI().equals(API_LOG_IN)) {
             System.out.println("start JwtAutFilter");
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             final String jwt;
@@ -43,15 +43,15 @@ public class JwtAutFilter extends OncePerRequestFilter {
             username = jwtTokenProvider.extractUsername(jwt);
             System.out.println("username from jwt = " + username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                //UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 if (jwtTokenProvider.isTokenValid(jwt)) {
                     //этот JwtAuthenticationToken бы проверить, что с ним все ок и так можно
+                    //мб сюда токен передавать, а там с ним разбираться.
                     JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(
                             username
                     );
+                    //это зачем?
                     jwtAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    Authentication authentication = authenticationManager.authenticate(jwtAuthenticationToken);// наверное тут проверки всякие, пока заглушки.
+                    Authentication authentication = authenticationManager.authenticate(jwtAuthenticationToken);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

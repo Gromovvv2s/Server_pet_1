@@ -15,12 +15,9 @@ public class UsernamePasswordAutProvider implements AuthenticationProvider {
     private PersonRepository personRepository;
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        //тут вроде должны в бд сгонять или нет я зх бл
-        // тут сгоняем в бд и проверим.
-        // а мб и не тут, пока не понял, где
-        // ии грит что тут, пробуем!
+        System.out.println("start UsernamePasswordAutProvider process!");
         Person person = personRepository.findByUsername(authentication.getPrincipal().toString());
-        System.out.printf("111");
+        System.out.println("finish UsernamePasswordAutProvider process!");
         return new UsernamePasswordAuthenticationToken(authentication.getName(), null, authentication.getAuthorities());
 
     }
@@ -28,7 +25,6 @@ public class UsernamePasswordAutProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         // Указываем, какие типы Authentication этот провайдер поддерживает
-        return authentication.equals(UsernamePasswordAuthenticationToken.class); // Пример для логина/пароля
-        // или JwtAuthenticationToken.class для JWT
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }

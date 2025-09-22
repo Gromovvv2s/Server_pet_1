@@ -3,6 +3,8 @@ package sg.spring_pet1.model.dto;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+
+
 @EqualsAndHashCode
 public class Test implements Serializable {
     public Test(String s) {

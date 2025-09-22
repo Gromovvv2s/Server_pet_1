@@ -4,37 +4,29 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
 
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
-
-    private final String token;
-
-    public JwtAuthenticationToken(String token) {
+    private final String principal;
+    public JwtAuthenticationToken(String principal) {
         super(null);
-        this.token = token;
-        setAuthenticated(true); // Изначально не аутентифицирован
+        this.principal = principal;
+        setAuthenticated(false); // Изначально не аутентифицирован
     }
 
-    public JwtAuthenticationToken(String token, Collection<? extends GrantedAuthority> authorities) {
+    public JwtAuthenticationToken(String principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
-        this.token = token;
         super.setAuthenticated(true); // Аутентифицирован
+        this.principal = principal;
     }
 
     @Override
     public Object getCredentials() {
-        return token;
-    }
+        return null;
+    } // пароль
 
     @Override
     public Object getPrincipal() {
-        return null; // В principal можешь положить ID пользователя или другие данные, извлеченные из JWT
+        return principal; //имя
     }
-
-    public String getToken() {
-        return token;
-    }
-
 }

@@ -36,16 +36,14 @@ public class UsernamePasswordAutFilter extends OncePerRequestFilter {
         }
         System.out.println("start UsernamePasswordAuthenticationFilter");
         try {
-            // Преобразуем JSON из тела запроса в LoginRequest
             LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
             System.out.println("loginRequest: " + loginRequest);
-            // Создаем объект UsernamePasswordAuthenticationToken
+
             UsernamePasswordAuthenticationToken usernamePasswordAuthToken = new UsernamePasswordAuthenticationToken(
                     loginRequest.getUsername(),
                     loginRequest.getPassword()
             );
             // Аутентифицируем пользователя
-            //будет вызван UsernamePasswordAutProvider - почему-то не мой провайдер....
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthToken);
             System.out.println("authentication: " + authentication);
             // Устанавливаем аутентификацию в SecurityContextHolder

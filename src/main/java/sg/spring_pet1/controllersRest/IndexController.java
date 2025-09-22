@@ -8,16 +8,11 @@ import sg.spring_pet1.model.dto.Test;
 
 @RestController
 public class IndexController {
-    @GetMapping("/index")
-    public ResponseEntity<String> index() {
+    @GetMapping(value = "/index", produces = {"application/json"})
+    public ResponseEntity<Test> index() {
         System.out.println("index");
-        //SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        return ResponseEntity.ok("Hello World");
-    }
-
-    @GetMapping(value = "/test", produces = "application/json")
-    public ResponseEntity<Test> test() {
-        Test t = new Test("заебал");
-        return ResponseEntity.ok(t);
+        String userName = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Test test = new Test("все работает, я знаю, что зашел пользователь: " + userName);
+        return ResponseEntity.ok(test);
     }
 }
