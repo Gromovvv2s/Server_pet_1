@@ -1,9 +1,6 @@
 package sg.spring_pet1.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.After;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -33,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static sg.spring_pet1.util.CollectionsAPI.API_LOG_IN;
-import static sg.spring_pet1.util.CollectionsAPI.API_TEST;
 
 @Configuration
 @EnableWebSecurity
@@ -57,8 +51,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, API_LOG_IN).permitAll()
-                        .requestMatchers(HttpMethod.GET, API_TEST).permitAll()
-                        .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
+                        .requestMatchers("v3/api-docs").permitAll()
+                        .requestMatchers("swagger-ui/**").permitAll()
+                        .requestMatchers("v3/api-docs/swagger-config").permitAll()
+                        .anyRequest().permitAll()
+                        //.anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .addFilterBefore(usernamePasswordAutFilter(authenticationConfiguration.getAuthenticationManager(), objectMapper()),  UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAutFilter(jwtTokenProvider, authenticationConfiguration.getAuthenticationManager()),  UsernamePasswordAuthenticationFilter.class);

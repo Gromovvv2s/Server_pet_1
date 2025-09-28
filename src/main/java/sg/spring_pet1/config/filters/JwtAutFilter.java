@@ -15,13 +15,10 @@ import sg.spring_pet1.service.JwtTokenProvider;
 
 import java.io.IOException;
 
-import static sg.spring_pet1.util.CollectionsAPI.API_LOG_IN;
-
 public class JwtAutFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
-
     public JwtAutFilter(JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
@@ -29,7 +26,7 @@ public class JwtAutFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (!request.getRequestURI().equals(API_LOG_IN)) {
+        if (false) {
             System.out.println("start JwtAutFilter");
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             final String jwt;
