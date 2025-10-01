@@ -45,7 +45,7 @@ public class MessageController {
         List<MessageDto> result = new ArrayList<>();
         try {
             result = personRepository.findById(idPerson).get().getMessages().stream()
-                    .map(m -> new MessageDto(m.getData()))
+                    .map(m -> new MessageDto(m.getData(), m.getUsernameFrom()))
                     .collect(Collectors.toList());
         } catch (Throwable e) {
             System.out.println("api getMessagesPerson error!!!");
