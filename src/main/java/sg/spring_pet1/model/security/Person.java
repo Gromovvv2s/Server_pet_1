@@ -29,6 +29,7 @@ public class Person implements UserDetails {
     private List<Role> roles;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Message> messages;
+    private Set<Long> idsFriends;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -94,5 +95,13 @@ public class Person implements UserDetails {
 
     public void setMessages(Set<Message> messages) {
         this.messages = messages;
+    }
+
+    public Set<Long> getIdsFriends() {
+        return idsFriends;
+    }
+
+    public void setIdsFriends(Set<Long> idsFriends) {
+        this.idsFriends = idsFriends;
     }
 }
