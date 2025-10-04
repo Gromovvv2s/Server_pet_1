@@ -18,7 +18,7 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping(API_LOG_IN)
+    @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(Authentication authentication) {
         String token = jwtTokenProvider.generateToken(authentication.getName());
         System.out.println("token be generated: " + token);

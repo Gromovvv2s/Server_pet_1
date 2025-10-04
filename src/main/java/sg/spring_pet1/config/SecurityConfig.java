@@ -50,12 +50,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS and configure it
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, API_LOG_IN).permitAll()
+                        //.requestMatchers(HttpMethod.POST, API_LOG_IN).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers("v3/api-docs").permitAll()
                         .requestMatchers("swagger-ui/**").permitAll()
                         .requestMatchers("v3/api-docs/swagger-config").permitAll()
-                        .anyRequest().permitAll()
-                        //.anyRequest().authenticated() // Все остальные запросы требуют аутентификации
+                        //.anyRequest().permitAll()
+                        .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .addFilterBefore(usernamePasswordAutFilter(authenticationConfiguration.getAuthenticationManager(), objectMapper()),  UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAutFilter(jwtTokenProvider, authenticationConfiguration.getAuthenticationManager()),  UsernamePasswordAuthenticationFilter.class);
