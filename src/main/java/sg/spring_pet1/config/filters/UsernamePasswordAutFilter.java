@@ -16,12 +16,13 @@ import sg.spring_pet1.model.dto.LoginRequest;
 import java.io.IOException;
 import java.util.Set;
 
-import static sg.spring_pet1.util.CollectionsAPI.API_LOG_IN;
+import static sg.spring_pet1.util.CollectionsAPI.LOG_IN;
+import static sg.spring_pet1.util.CollectionsAPI.getUrlWithVersion;
 
 public class UsernamePasswordAutFilter extends OncePerRequestFilter {
     private final AuthenticationManager authenticationManager;
     private final ObjectMapper objectMapper; // Для чтения JSON из тела запроса
-    private static final Set<String> URLS_NEED_FILTER = Set.of(API_LOG_IN);
+    private static final Set<String> URLS_NEED_FILTER = Set.of(getUrlWithVersion(LOG_IN));
 
     public UsernamePasswordAutFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper) {
         this.authenticationManager = authenticationManager;
@@ -31,6 +32,7 @@ public class UsernamePasswordAutFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String currentUrl = request.getRequestURI();
+        // currentUrl убрать из него версию = v1
         if (URLS_NEED_FILTER.contains(currentUrl)) {
             System.out.println("start process filter request UsernamePasswordAuthenticationFilter by url = " + currentUrl);
             try {
@@ -59,6 +61,5 @@ public class UsernamePasswordAutFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
     }
-
 }
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sg.spring_pet1.service.JwtTokenProvider;
 import sg.spring_pet1.model.dto.LoginResponse;
 
-import static sg.spring_pet1.util.CollectionsAPI.API_LOG_IN;
+import static sg.spring_pet1.util.CollectionsAPI.LOG_IN;
 
 
 @RestController
@@ -18,7 +18,7 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/login")
+    @PostMapping(LOG_IN)
     public ResponseEntity<LoginResponse> login(Authentication authentication) {
         String token = jwtTokenProvider.generateToken(authentication.getName());
         System.out.println("token be generated: " + token);

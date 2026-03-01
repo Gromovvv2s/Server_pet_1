@@ -16,10 +16,13 @@ import sg.spring_pet1.service.JwtTokenProvider;
 import java.io.IOException;
 import java.util.Set;
 
-import static sg.spring_pet1.util.CollectionsAPI.API_LOG_IN;
+import static sg.spring_pet1.util.CollectionsAPI.*;
 
 public class JwtAutFilter extends OncePerRequestFilter {
-    private static final Set<String> NEED_SPACE_URLS = Set.of(API_LOG_IN);
+    private static final Set<String> JWT_AUT_URLS_NEED_FILTER = Set.of(
+            getUrlWithVersion(PERSON_FRIENDS),
+            getUrlWithVersion(INDEX)
+    );
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     public JwtAutFilter(JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
@@ -30,7 +33,7 @@ public class JwtAutFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String currentUrl = request.getRequestURI();
-        if (!NEED_SPACE_URLS.contains(currentUrl)) {
+        if (JWT_AUT_URLS_NEED_FILTER.contains(currentUrl)) {
             System.out.println("start process JwtAutFilter by url= " + currentUrl);
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {

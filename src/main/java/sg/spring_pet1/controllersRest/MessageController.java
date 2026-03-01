@@ -25,7 +25,7 @@ public class MessageController {
     private PersonRepository personRepository;
     @Autowired
     private MessageRepository messageRepository;
-    @PostMapping("/send/{idFrom}/{idTo}")
+    @PostMapping("/send/byId/{idFrom}/{idTo}")
     public ResponseEntity<HttpStatus> sendMessage(@RequestBody MessageDto messageDto, @PathVariable Long idFrom, @PathVariable Long idTo) {
         HttpStatus result;
         //должно произойти в рамках одной транзакции!
@@ -49,7 +49,7 @@ public class MessageController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/send/{nameFrom}/{nameTo}")
+    @PostMapping("/send/byName/{nameFrom}/{nameTo}")
     public ResponseEntity<HttpStatus> sendMessage(@RequestBody MessageDto messageDto,@PathVariable String nameFrom, @PathVariable String nameTo) {
         HttpStatus result;
         //должно произойти в рамках одной транзакции!
@@ -76,7 +76,7 @@ public class MessageController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/get/{idPerson}/{idFriend}")
+    @GetMapping("/get/byId/{idPerson}/{idFriend}")
     public ResponseEntity<List<MessageDto>> getMessagesPersonByIds(@PathVariable Long idPerson, @PathVariable Long idFriend) {
         List<MessageDto> result = new ArrayList<>();
         try {
@@ -89,7 +89,7 @@ public class MessageController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/get/{namePerson}/{nameFriend}")
+    @GetMapping("/get/byName/{namePerson}/{nameFriend}")
     public ResponseEntity<List<MessageDto>> getMessagesPersonByNames(@PathVariable String namePerson, @PathVariable String nameFriend) {
         List<MessageDto> result = new ArrayList<>();
         try {

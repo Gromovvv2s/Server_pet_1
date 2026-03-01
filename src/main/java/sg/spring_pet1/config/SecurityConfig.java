@@ -27,7 +27,7 @@ import sg.spring_pet1.service.JwtTokenProvider;
 import java.util.Arrays;
 import java.util.List;
 
-import static sg.spring_pet1.util.CollectionsAPI.API_LOG_IN;
+import static sg.spring_pet1.util.CollectionsAPI.LOG_IN;
 
 @Configuration
 @EnableWebSecurity
@@ -50,15 +50,17 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS and configure it
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers(HttpMethod.POST, API_LOG_IN).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, LOG_IN).permitAll()
+
                         .requestMatchers("v3/api-docs").permitAll()
                         .requestMatchers("swagger-ui/**").permitAll()
                         .requestMatchers("v3/api-docs/swagger-config").permitAll()
+
                         //.anyRequest().permitAll()
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .addFilterBefore(usernamePasswordAutFilter(authenticationConfiguration.getAuthenticationManager(), objectMapper()),  UsernamePasswordAuthenticationFilter.class)
+                //мб даже если закоментить фильтр, он всеравно вызывется. проверить. мб из-за того, что попал уже в менеджер.
                 .addFilterBefore(jwtAutFilter(jwtTokenProvider, authenticationConfiguration.getAuthenticationManager()),  UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

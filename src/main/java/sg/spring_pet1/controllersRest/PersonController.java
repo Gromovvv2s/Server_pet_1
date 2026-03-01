@@ -2,9 +2,8 @@ package sg.spring_pet1.controllersRest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sg.spring_pet1.model.security.Person;
 import sg.spring_pet1.repo.PersonRepository;
@@ -14,18 +13,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static sg.spring_pet1.util.CollectionsAPI.PERSON_FRIENDS;
+
 @RestController
-@RequestMapping("/person/{id}")
 public class PersonController {
     @Autowired
     private PersonRepository personRepository;
-    @GetMapping("/friends")
-    public ResponseEntity<List<String>> getFriends(@PathVariable Long id) {
-        //костыль.
-        // в дальнейшем будем брать текущего пользователя из контекста.
+    @GetMapping(value = PERSON_FRIENDS, produces = {"application/json"})
+    public ResponseEntity<List<String>> getFriends() {
         List<String> namesFriends = new ArrayList<>();
         try {
-            Person currentPerson = personRepository.findById(id).get();
+            String nameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+            Person currentPerson = personRepository.findByUsername(nameCurrentUser);
             namesFriends = currentPerson.getIdsFriends().stream()
                 .map(idFriend -> {
                     Optional<Person> currentFriend = personRepository.findById(idFriend);
